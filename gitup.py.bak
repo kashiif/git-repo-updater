@@ -1,4 +1,4 @@
-#!c:\python27\python.exe
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 """
@@ -11,11 +11,6 @@ import os
 import re
 import shlex
 import subprocess
-
-import sys
-
-import colorama
-colorama.init()
 
 __author__ = "Ben Kurtovic"
 __copyright__ = "Copyright (c) 2011-2012 Ben Kurtovic"
@@ -35,18 +30,12 @@ blue = lambda t: style_text(t, "blue")
 def style_text(text, effect):
     """Give a text string a certain effect, such as boldness, or a color."""
     ansi = { # ANSI escape codes to make terminal output fancy
-		"""
         "reset": "\x1b[0m",
         "bold": "\x1b[1m",
         "red": "\x1b[1m\x1b[31m",
         "green": "\x1b[1m\x1b[32m",
         "yellow": "\x1b[1m\x1b[33m",
         "blue": "\x1b[1m\x1b[34m",
-		"""
-        "blue": colorama.Fore.BLUE,
-        "bold": colorama.Fore.BLUE,
-        "red": colorama.Fore.BLUE,
-        "green": colorama.Fore.BLUE,
     }
     
     try: # pad text with effect, unless effect does not exist
@@ -62,8 +51,7 @@ def out(indent, msg):
     else:
         spacing = " " * width * indent
     msg = re.sub("\s+", " ", msg) # collapse multiple spaces into one
-    #sys.stdout.write(spacing + msg)
-    print (spacing + msg)
+    print spacing + msg
 
 def exec_shell(command):
     """Execute a shell command and get the output."""
@@ -108,9 +96,9 @@ def update_repository(repo_path, repo_name):
         
     else: # stuff has happened!
         out(2, "There are new changes upstream...")
-        status = exec_shell("git status").lower()
+        status = exec_shell("git status")
     
-        if status.endswith("nothing to commit, working directory clean"):
+        if status.endswith("nothing to commit (working directory clean)"):
             out(2, green("Pulling new changes..."))
             result = exec_shell("git pull")
             out(2, "The following changes have been made since {}:".format(
